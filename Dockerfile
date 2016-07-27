@@ -20,13 +20,14 @@ RUN apt-get -y update && apt-get -y install apache2 libapache2-mod-perl2 libapac
 ONBUILD ARG SSODOMAIN
 
 # Change SSO Domain
-ONBUILD ADD lmConf-1.js /var/lib/lemonldap-ng/conf/
+ONBUILD ADD lmConf-2.js /var/lib/lemonldap-ng/conf/
+ONBUILD RUN chown root:www-data /var/lib/lemonldap-ng/conf/lmConf-2.js
 ONBUILD RUN sed -i "s/example\.com/$SSODOMAIN/g" /etc/lemonldap-ng/* /var/lib/lemonldap-ng/conf/lmConf-1.js /var/lib/lemonldap-ng/test/index.pl
 
 # Enable sites
-ONBUILD RUN a2ensite handler-apache2.conf
-ONBUILD RUN a2ensite portal-apache2.conf
-ONBUILD RUN a2ensite manager-apache2.conf
+RUN a2ensite handler-apache2.conf
+RUN a2ensite portal-apache2.conf
+RUN a2ensite manager-apache2.conf
 
 RUN a2enmod fcgid perl alias rewrite
 
@@ -34,5 +35,4 @@ RUN a2enmod fcgid perl alias rewrite
 RUN rm -rf /tmp/lemonldap-ng-config
 
 EXPOSE 80 443
-VOLUME ["/var/log/apache2", "/etc/apache2", "/etc/lemonldap-ng", "/var/lib/lemonldap-ng/conf", "/var/lib/lemonldap-ng/sessions", "/var/lib/lemonldap-ng/psessions"]
 CMD ["/usr/sbin/apache2ctl", "-D", "FOREGROUND"]
