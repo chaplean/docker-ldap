@@ -22,6 +22,7 @@ RUN wget -O - http://lemonldap-ng.org/_media/rpm-gpg-key-ow2 | apt-key add - \
         apache2 \
         libapache2-mod-perl2 \
         libapache2-mod-fcgid \
+		libio-string-perl \
         lemonldap-ng
 
 # Change SSO DOMAIN here
